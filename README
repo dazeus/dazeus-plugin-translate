@@ -1,0 +1,10 @@
+= Translate plugin for DaZeus =
+
+This repository contains the translate plugin for DaZeus, which allows
+translating strings to various languages with the }translate command using the
+Google Translate API.
+
+You need to get an API key to use it - see
+https://cloud.google.com/translate/docs. This is a paid API, pricing is $20 per
+1M characters and charges are adjusted in proportion (i.e. 500 characters is
+$0.01).
