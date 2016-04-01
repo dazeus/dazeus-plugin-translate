@@ -71,17 +71,21 @@ sub translate_pipeline {
 			}
 			my $to_language = $languages{lc $1};
 
+			if(!$language) {
+				my $r = $wgt->detect({q => $string});
+				$language = $r->{'data'}{'detections'}[0][0]{'language'};
+			}
+
+			if($language eq $to_language) {
+				next;
+			}
+
 			my $params = {
 				q => $string,
 				target => $to_language,
+				source => $language,
 				format => 'text',
 			};
-			if($language) {
-				if($language eq $to_language) {
-					next;
-				}
-				$params->{'source'} = $language;
-			}
 
 			my $r = $wgt->translate($params);
 			$string = $r->{'data'}{'translations'}[0]{'translatedText'};
