@@ -18,7 +18,15 @@ my $wgt = WWW::Google::Translate->new({key => $key});
 my $r = $wgt->languages({target => "en"});
 my %languages;
 foreach(@{$r->{'data'}{'languages'}}) {
-	$languages{lc $_->{'name'}} = $_->{'language'};
+	my $name = lc $_->{'name'};
+	$languages{$name} = $_->{'language'};
+
+	# store "chinese (simplified)" as "chinese" as well, this may overwrite "chinese (traditional)"
+	# but user can always specify the version he wants
+	if($name =~ /\s/) {
+		$name =~ s/\s+.*$//;
+		$languages{$name} = $_->{'language'};
+	}
 }
 
 my $dazeus = DaZeus->connect($socket) or die $!;
@@ -64,7 +72,7 @@ sub translate_pipeline {
 				return "Sorry, I don't know the language '$1' :(\n";
 			}
 			$language = $languages{lc $1};
-		} elsif($command =~ /^to(\w+)$/) {
+		} elsif($command =~ /^to(\w+(?: \(\w+\))?)$/) {
 			if(!exists $languages{lc $1}) {
 				return "Sorry, I don't know the language '$1' :(\n";
 			}
