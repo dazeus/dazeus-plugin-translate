@@ -93,6 +93,14 @@ sub translate_pipeline {
 				return "Failed to translate from '$language' to '$to_language'!\n";
 			}
 			$language = $to_language;
+		} elsif($command eq "detectLanguage") {
+			my $r = $wgt->detect({q => $string});
+			$language = $r->{'data'}{'detections'}[0][0]{'language'};
+		} elsif($command eq "returnLanguage") {
+			my $r = $wgt->detect({q => $string});
+			my $lang = $r->{'data'}{'detections'}[0][0]{'language'};
+			$language ||= "unknown";
+			return "[returnLanguage] Active language: $language / Google detected language: $lang\n";
 		} else {
 			return "I don't know what you meant by '$command' :(\n";
 		}
