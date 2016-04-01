@@ -4,13 +4,6 @@ use warnings;
 use WWW::Google::Translate;
 use DaZeus;
 
-my %languages = (
-	dutch => 'nl',
-	english => 'en',
-	french => 'fr',
-	japanese => 'ja'
-);
-
 my ($socket, $key) = @ARGV;
 if(!$socket || !$key) {
 	warn "Usage: $0 <socket> <Google API translate key>\n";
@@ -21,6 +14,12 @@ if(!$socket || !$key) {
 my $wgt = WWW::Google::Translate->new({key => $key});
 # Uncomment this if your user-agent cannot establish trusted SSL connections, or give a SSL_ca_path
 #$wgt->{ua}->ssl_opts(verify_hostname => 0);
+
+my $r = $wgt->languages({target => "en"});
+my %languages;
+foreach(@{$r->{'data'}{'languages'}}) {
+	$languages{lc $_->{'name'}} = $_->{'language'};
+}
 
 my $dazeus = DaZeus->connect($socket) or die $!;
 
