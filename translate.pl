@@ -56,11 +56,11 @@ sub translate_pipeline {
 	my $string;
 	my @commands;
 
-	if($pipeline =~ /^\s*"(.*)"\s+->\s+(.+)$/) {
+	if($pipeline =~ /^\s*"(.*)"\s*->\s*(.+)$/) {
 		$string = $1;
-		@commands = split /\s+->\s+/, $2;
+		@commands = split /\s*->\s*/, $2;
 	} else {
-		@commands = split /\s+->\s+/, $pipeline;
+		@commands = split /\s*->\s*/, $pipeline;
 		$string = shift @commands;
 	}
 
